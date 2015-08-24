@@ -49,7 +49,7 @@ namespace Game {
 		/// </summary>
 		public int Defense;
 
-		public RoleData (string id, string name, Vector3 startPosition, string spriteSrc, WeaponData weaponData, bool isHost = false, float speed = 3.5f, int attack = 100, int defense = 100) {
+		public RoleData (string id, string name, Vector3 startPosition, string spriteSrc, WeaponData weaponData, bool isHost = false, float speed = 1.5f, int attack = 100, int defense = 100) {
 			_id = id;
 			_name = name;
 			IsHost = isHost;

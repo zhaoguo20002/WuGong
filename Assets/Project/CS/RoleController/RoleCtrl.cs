@@ -45,7 +45,7 @@ public class RoleCtrl : MonoBehaviour {
 	public RoleData RoleData;
 	
 	List<Vector2> path;
-	float speed = 2;
+	float speed = 1;
 
 	tk2dSpriteAnimator ani;
 	Animator weaponAin;
@@ -68,7 +68,7 @@ public class RoleCtrl : MonoBehaviour {
 //	NavMesh2DBehaviour navMesh2D;
 //	List<NavMesh2DConnection> navMesh2DConnections;
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		path = new List<Vector2>();
 		ani = GetComponent<tk2dSpriteAnimator>();
 		ani.SetFrame(0);
@@ -95,7 +95,7 @@ public class RoleCtrl : MonoBehaviour {
 
 		weapon = transform.FindChild("weapon");
 
-		SetSpeed(1);
+		SetSpeed(RoleData.Speed);
 
 	}
 
@@ -360,9 +360,9 @@ public class RoleCtrl : MonoBehaviour {
 
 			break;
 		case "doActionEnd":
-			Debug.LogWarning("doActionEnd, " + ani.CurrentFrame);
 			if (ani.CurrentFrame >= ani.CurrentClip.frames.Length - 1) {
 				endAction();
+				Debug.LogWarning("doActionEnd");
 			}
 			break;
 		case "jump":
