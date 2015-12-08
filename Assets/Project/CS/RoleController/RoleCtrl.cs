@@ -48,6 +48,8 @@ public class RoleCtrl : MonoBehaviour {
 	float speed = 1;
 
 	tk2dSpriteAnimator ani;
+	tk2dSprite roleSprite;
+	tk2dSprite weaponSprite;
 	Animator weaponAin;
 	Vector3 lastPosition;
 	string curClipName;
@@ -72,6 +74,7 @@ public class RoleCtrl : MonoBehaviour {
 		path = new List<Vector2>();
 		ani = GetComponent<tk2dSpriteAnimator>();
 		ani.SetFrame(0);
+		roleSprite = GetComponent<tk2dSprite>();
 		weaponAin = GetComponentInChildren<Animator>();
 //		ani.AnimationCompleted = completeCallback;
 		transform.position = Statics.GetMapResetPosition(transform.position);
@@ -94,8 +97,9 @@ public class RoleCtrl : MonoBehaviour {
 		flying = false;
 
 		weapon = transform.FindChild("weapon");
-
-		SetSpeed(RoleData.Speed);
+		if (RoleData != null) {
+			SetSpeed(RoleData.Speed);
+		}
 
 	}
 
@@ -153,6 +157,29 @@ public class RoleCtrl : MonoBehaviour {
 		states = "normal";
 	}
 
+	public void SetStand(string direct) {
+		curClipName = direct;
+		ani.Play(curClipName);
+		resetWeapon(direct);
+		MakeStop();
+	}
+
+	public void resetWeapon(string direct) {
+		weaponAin.Play("StickIdle_" + curClipName);
+		if (weaponSprite == null) {
+			weaponSprite = weaponAin.GetComponentInChildren<tk2dSprite>();
+		}
+		Debug.LogWarning(weaponSprite + "," + roleSprite.SortingOrder + "," + direct);
+		if (weaponSprite != null) {
+			if (direct == "up" || direct == "right") {
+				weaponSprite.SortingOrder = roleSprite.SortingOrder + 1;
+			}
+			else {
+				weaponSprite.SortingOrder = roleSprite.SortingOrder - 1;
+			}
+		}
+	}
+
 	/// <summary>
 	/// Sets the speed.
 	/// </summary>
@@ -205,6 +232,7 @@ public class RoleCtrl : MonoBehaviour {
 			transform.position = Vector2.MoveTowards(transform.position, resultPostion, speed * Time.deltaTime);
 			curClipName = getDirction(transform.position, lastPosition);
 			ani.Play(curClipName);
+			resetWeapon(curClipName);
 			lastPosition = transform.position;
 		}
 		if (Vector2.Distance(transform.position, resultPostion) < 0.01f) {
